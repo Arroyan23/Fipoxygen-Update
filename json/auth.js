@@ -7,4 +7,5 @@ const express = require("express");
 const route = express.Router();
 const jwt = require("jsonwebtoken");
 
-// route untuk registrasi ap
+// route untuk registrasi app user
+// menambahkan fungsi login autentikasi

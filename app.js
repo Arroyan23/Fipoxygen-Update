@@ -5,6 +5,8 @@ const express = require("express");
 // panggil fungsi konek ke database
 require("./mongo/db");
 const expressLayouts = require("express-ejs-layouts");
+const User = require("./mongodb/user");
+const router = express.Router();
 const { body, validationResult, check } = require("express-validator");
 const Data = require("./mongodb/settings");
 const { get } = require("mongoose");
@@ -18,6 +20,12 @@ app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 
 // untuk halaman login
+
+router.post("/submitlogin", (req, res) => {
+  const { email, password } = req.body;
+
+  // cek duplikat apakah sudah ada datanya di database
+});
 
 app.get("/", (req, res) => {
   res.render("login");
@@ -49,20 +57,20 @@ app.post("/submit", (req, res) => {
 
 // debugging validator
 
-app.post(
-  "/submitlogin",
-  [check("email", "gunakan format email yang benar").isEmail()],
-  (req, res) => {
-    const error = validationResult(req);
-    if (!error.isEmpty()) {
-      res.render("login", {
-        error: error.array(),
-      });
-    } else {
-      res.redirect("/dashboard");
-    }
-  }
-);
+// app.post(
+//   "/submitlogin",
+//   [check("email", "gunakan format email yang benar").isEmail()],
+//   (req, res) => {
+//     const error = validationResult(req);
+//     if (!error.isEmpty()) {
+//       res.render("login", {
+//         error: error.array(),
+//       });
+//     } else {
+//       res.redirect("/dashboard");
+//     }
+//   }
+// );
 
 app.get("/addform", (req, res) => {
   res.render("add");

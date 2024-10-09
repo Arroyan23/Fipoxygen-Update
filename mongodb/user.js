@@ -1,14 +1,14 @@
 // untuk validasi user
-
+require("../mongo/db");
 const mongoose = require("mongoose");
 
-const userFipoxygen = mongoose.model("user", {
+const User = mongoose.model("User", {
   email: {
     type: String,
     required: true,
   },
   username: {
-    typr: String,
+    type: String,
     required: true,
   },
   password: {
@@ -16,5 +16,15 @@ const userFipoxygen = mongoose.model("user", {
     required: true,
   },
 });
+// debugging berhasil
 
-module.exports = userFipoxygen;
+// const newUser = new User({
+//   email: "syawqiarroyan@gmail.com",
+//   username: "royan syawqi",
+//   password: "hirolucu123",
+// });
+
+// newUser.save();
+// console.log("Data berhasil di unggah ke cluster");
+
+module.exports = User;
