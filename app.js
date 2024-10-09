@@ -5,7 +5,9 @@ const express = require("express");
 // panggil fungsi konek ke database
 require("./mongo/db");
 const expressLayouts = require("express-ejs-layouts");
-const Data = require("./utils/settings");
+const { body, validationResult, check } = require("express-validator");
+const Data = require("./mongodb/settings");
+const { get } = require("mongoose");
 const app = express();
 const port = 3000;
 
@@ -13,6 +15,13 @@ const port = 3000;
 app.set("view engine", "ejs");
 // set staticnya
 app.use(express.static("public"));
+app.use(express.urlencoded({ extended: true }));
+
+// untuk halaman login
+
+app.get("/", (req, res) => {
+  res.render("login");
+});
 
 // setting untuk getnya
 app.get("/dashboard", (req, res) => {
@@ -27,9 +36,37 @@ app.get("/tables", async (req, res) => {
   });
 });
 
-app.get('/tables/add/', (req, res) => {
-  
-})
+app.post("/submit", (req, res) => {
+  const getData = req.body;
+  Data.insertMany(getData)
+    .then((results) => {
+      res.redirect("/tables");
+    })
+    .catch((err) => {
+      console.log("Error Detected");
+    });
+});
+
+// debugging validator
+
+app.post(
+  "/submitlogin",
+  [check("email", "gunakan format email yang benar").isEmail()],
+  (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.render("login", {
+        error: error.array(),
+      });
+    } else {
+      res.redirect("/dashboard");
+    }
+  }
+);
+
+app.get("/addform", (req, res) => {
+  res.render("add");
+});
 
 // setting port listeningnya
 app.listen(port, () => {
